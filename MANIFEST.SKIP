@@ -1,0 +1,41 @@
+# Root allowlist filter
+#
+# NOTE:
+#   Include only specific root dirs or files in the tarball; skip everything else.
+#   This keeps Markdown files only in version control, e.g. README.md, docs
+#   directory (contains POD files converted to Markdown with pod2markdown).
+\A(?!(?>bin|script|examples|eg|lib|t|xt|share|data)/|(?>Makefile\.PL|README|LICENSE|MANIFEST|Changes|INSTALL|CONTRIBUTING|TODO|SECURITY|META\.(?>json|yml))\z)
+
+/MANIFEST(?>\.bak)?\z
+/(?>MY)?META\.(?>json|yml)\z
+
+# Junk
+\.o\z
+\.bs\z
+\.tar\z
+\.tgz\z
+\.gz\z
+\.zip\z
+\.tmp\z
+\.old\z
+\.bak\z
+\.rej\z
+\.orig\z
+
+# ExtUtils::MakeMaker
+/blib/
+/Makefile(?>\.old)?\z
+/pm_to_blib\z
+
+# Devel::Cover
+/cover_db/
+/\.last_cover_stats\z
+
+# Devel::NYTProf
+/nytprof\.out\z
+
+# git
+/\.git/
+/\.gitignore\z
+
+/App\-prog-(?s:.+)\z

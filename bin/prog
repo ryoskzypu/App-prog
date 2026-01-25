@@ -1,0 +1,217 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use App::prog;
+
+exit App::prog->new->init(@ARGV)->run;
+
+=encoding UTF-8
+
+=head1 NAME
+
+prog - read a file, print its contents, then run stat(1) on it
+
+=head1 SYNOPSIS
+
+B<prog> [I<OPTION>]... [I<FILE>]
+
+Options:
+
+  -c, --color=WHEN      colorize output; WHEN is 'never', 'always', or 'auto';
+                        -c means --color='auto'
+      --palette=PALETTE set colors used when --color is active; PALETTE is an
+                        output=color pair
+      --dry-run         print but do not execute commands
+      --generate-cfg    create a default config file and exit
+  -h, --help            show this help and exit
+  -q, --quiet           suppress standard output
+  -v, --verbose         more output info
+  -V, --version         show version info and exit
+
+Examples:
+
+=for highlighter language=shell
+
+  $ prog FILE
+  $ prog --dry-run -v FILE
+  $ prog --color=always | cat
+  $ prog <<<$'hi\nbye' -vc
+
+If no I<FILE> is given or I<FILE> is C<->, read standard input.
+
+=head1 DESCRIPTION
+
+B<prog> is a small command-line utility intended to be a baseline for Perl CLI
+programs; it follows Unix conventions and modern practices.
+
+This script reads an entire file into memory, prints its contents to standard
+output, then runs the command L<stat(1)> on it to display status information.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-c>, B<--color>[=I<WHEN>]
+
+Colorize output (per L<Term::ANSIColor> spec) depending on I<WHEN>. I<WHEN> is
+C<never>, C<always>, or C<auto>; B<-c> means B<--color=>C<auto>, which enables
+color only when C<STDOUT> is an interactive TTY; C<always> forces color; C<never>
+disables color. Default: C<never>.
+
+=item B<--palette>=I<PALETTE>
+
+Set the colors used when B<--color> is active (per L<Term::ANSIColor> spec); I<PALETTE>
+is an C<output=color> pair (an output type and its color).
+
+Default colors:
+
+=for highlighter language=perl
+
+  data     => 'black on_grey18',  # File contents / stat(1).
+  debug    => 'green',
+  dump     => 'r102g217b239',
+  dry_run  => 'magenta',          # E.g. "Executing 'stat file.txt'".
+  filename => 'grey12',
+  header   => 'bold cyan',        # E.g. "File 'file.txt' status info".
+  verbose  => 'blue',
+
+Example:
+
+=for highlighter language=shell
+
+  $ prog \
+      -c \
+      --palette header='bold white' \
+      --palette filename=bright_green \
+      --palette verbose='black on_blue' \
+      --verbose \
+      file.txt
+
+Note that invalid outputs and colors are silently ignored.
+
+=item B<--dry-run>
+
+Print commands that would be executed to C<STDERR>; do not run them. Default: C<false>.
+
+=item B<--generate-cfg>
+
+Create a default configuration file and exit. The F<prog.toml> file is created
+only if none exists, under C<$XDG_CONFIG_HOME/prog> (or C<$HOME/.config/prog>
+if C<$XDG_CONFIG_HOME> is unset), or in the home directory as a fallback.
+
+=item B<-h>, B<--help>
+
+Display a summary of options and exit.
+
+=item B<-q>, B<--quiet>
+
+Do not write anything to C<STDOUT>. Default: C<false>.
+
+=item B<-v>, B<--verbose>
+
+Display more information to C<STDERR>. Default: C<false>.
+
+=item B<-V>, B<--version>
+
+Display the B<prog> version number and exit.
+
+=back
+
+=head2 COMPLETION
+
+To enable tab completion in bash, put the script in the C<PATH> and run this
+in the shell or add it to a bash startup file (e.g. F</etc/bash.bashrc> or F<~/.bashrc>):
+
+=for highlighter language=shell
+
+  complete -C prog prog
+
+=head1 CONFIGURATION
+
+B<prog> supports a configuration file to simplify common L</OPTIONS>. By default,
+it looks first for F<prog.toml> in the current directory, then in C<$XDG_CONFIG_HOME/prog>
+(or C<$HOME/.config/prog> if C<$XDG_CONFIG_HOME> is unset), and last in the
+home directory. Override this by setting the C<PROG_CFG> environment variable
+to a file path.
+
+The configuration file uses L<TOML|https://toml.io/en/v1.0.0>. Example F<prog.toml>:
+
+=for highlighter language=toml
+
+  color   = 'auto'
+  verbose = true
+
+  [palette]
+  filename = 'bright_green'
+  header   = 'bold white'
+  verbose  = 'black on_blue'
+
+=head1 SIGNALS
+
+=over 4
+
+=item SIGINT
+
+=item SIGTERM
+
+When caught, displays a message to C<STDERR> and exits cleanly with status C<0>.
+
+=back
+
+=head1 EXIT STATUS
+
+=for highlighter
+
+  0  success
+  1  general failure
+  2  command-line usage error
+
+=head1 ENVIRONMENT
+
+=over 4
+
+=item B<PROG_CFG>
+
+If set to an existing file path, overrides the default configuration file path.
+
+=item B<PROG_DEBUG>
+
+If true, displays debug information to C<STDERR>.
+
+=back
+
+=head1 BUGS
+
+Report bugs at L<https://github.com/author/App-prog/issues>.
+
+=head1 AUTHOR
+
+ryoskzypu <ryoskzypu@proton.me>
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+L<Term::ANSIColor>
+
+=item *
+
+L<stat(1)>
+
+=item *
+
+L<The Art of Unix Programming|http://www.catb.org/esr/writings/taoup/html/>
+
+=back
+
+=head1 COPYRIGHT
+
+Copyright © 2026 ryoskzypu
+
+MIT-0 License. See LICENSE for details.
+
+=cut
