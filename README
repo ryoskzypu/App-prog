@@ -1,0 +1,45 @@
+App::prog
+
+prog is a small command-line utility intended to be a baseline for Perl CLI
+programs; it follows Unix conventions and modern practices.
+
+This script reads an entire file into memory, prints its contents to standard
+output, then runs the command stat(1) on it to display status information.
+
+
+INSTALLATION
+
+To download and install this module, use your favorite CPAN client:
+
+    cpanm App::prog
+
+To do it manually, run the following commands (after downloading and unpacking
+the tarball):
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the perldoc
+command:
+
+    perldoc prog
+    perldoc App::prog
+
+You can also look for information at:
+
+    GitHub issue tracker (report bugs here)
+        https://github.com/ryoskzypu/App-prog/issues
+
+    Search CPAN
+        https://metacpan.org/dist/App-prog
+
+
+COPYRIGHT
+
+Copyright © 2026 ryoskzypu
+MIT-0 License. See LICENSE for details.

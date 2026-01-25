@@ -2,8 +2,6 @@ MANIFEST
 MANIFEST.bak
 META.*
 MYMETA.*
-# Keep only README.md in version control.
-README
 
 # Junk
 *.o

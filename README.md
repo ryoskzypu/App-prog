@@ -11,7 +11,7 @@ output, then runs the command [stat(1)](http://man.he.net/man1/stat) on it to di
 To download and install this module directly with [cpanminus](https://metacpan.org/pod/App::cpanminus):
 
 ```shell
-$ cpanm https://github.com/ryoskzypu/App-prog
+$ cpanm https://github.com/ryoskzypu/App-prog.git
 ```
 
 To do it manually, run the following commands (after cloning the repository):
