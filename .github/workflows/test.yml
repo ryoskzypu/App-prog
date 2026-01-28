@@ -52,7 +52,7 @@ jobs:
         run: make test
 
       - name: Show errors on Ubuntu
-        if:  ${{ failure() && startsWith( matrix.runner, 'ubuntu-')}}
+        if:  ${{ failure() }}
         run: |
            cat /home/runner/.cpanm/work/*/build.log
 
