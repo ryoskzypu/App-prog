@@ -51,6 +51,11 @@ jobs:
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make test
 
+      - name: Show errors on Ubuntu
+      if:  ${{ failure() && startsWith( matrix.runner, 'ubuntu-')}}
+      run: |
+         cat /home/runner/.cpanm/work/*/build.log
+
 ###
 ### linux testing multiple Perl versions
 ###
