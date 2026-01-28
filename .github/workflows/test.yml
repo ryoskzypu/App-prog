@@ -1,6 +1,3 @@
-# CI for Perl tests on Linux
-# Based on https://github.com/xsawyerx/module-starter/blob/master/.github/workflows/test.yml.
-
 name: 'Build & Test'
 
 on:
@@ -10,11 +7,12 @@ on:
     tags-ignore:
       - "*"
   pull_request:
-  workflow_dispatch:
 
 jobs:
 
-# Fast test on system perl
+###
+### Fast Test on System Perl
+###
 
   ubuntu-latest:
     runs-on: ubuntu-latest
@@ -27,46 +25,46 @@ jobs:
       PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
       - run: perl -V
-      - name: Install deps using cpanm
+      - name: install deps using cpanm
         uses: perl-actions/install-with-cpanm@v1
         with:
           sudo: false
           args: --sudo --installdeps --with-recommends .
-
-      - name: Configure with Build.PL
+      - name: configure with Build.PL
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: perl Build.PL
-      - name: Build with Build.PL
+      - name: build with Build.PL
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build
-      - name: Test with Build.PL
+      - name: test with Build.PL
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build test
-
-      - name: Configure with Makefile.PL
+      - name: configure with Makefile.PL
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: perl Makefile.PL
-      - name: Build with Makefile.PL
+      - name: build with Makefile.PL
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make
-      - name: Test with Makefile.PL
+      - name: test with Makefile.PL
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make test
 
-# Linux testing - multiple perl versions
+###
+### linux testing multiple Perl versions
+###
 
   perl-versions:
     runs-on: ubuntu-latest
-    name: List perl versions
+    name: List Perl versions
     outputs:
       perl-versions: ${{ steps.action.outputs.perl-versions }}
     steps:
       - id: action
         uses: perl-actions/perl-versions@v1
         with:
-          since-perl: v5.40.0
+          since-perl: v5.8
           with-devel: true
 
   linux:
@@ -86,35 +84,33 @@ jobs:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
       - run: perl -V
-      - name: Install deps using cpanm
+      - name: install deps using cpanm
         uses: perl-actions/install-with-cpanm@v1
         with:
           sudo: false
           args: -v --installdeps --with-recommends .
-
-      - name: Configure with Build.PL
+      - name: configure with Build.PL
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: perl Build.PL
-      - name: Build with Build.PL
+      - name: build with Build.PL
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build
-      - name: Test with Build.PL
+      - name: test with Build.PL
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build test
         env:
           AUTHOR_TESTING: 1
           AUTOMATED_TESTING: 1
           RELEASE_TESTING: 1
-
-      - name: Configure with Makefile.PL
+      - name: configure with Makefile.PL
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: perl Makefile.PL
-      - name: Build with Makefile.PL
+      - name: build with Makefile.PL
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make
-      - name: Test with Makefile.PL
+      - name: test with Makefile.PL
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make test
         env:
