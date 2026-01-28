@@ -16,10 +16,10 @@ my %WriteMakefileArgs = (
         'ExtUtils::MakeMaker' => '0',
     },
     TEST_REQUIRES => {
-        'Test2::V1' => '0',
+        'Test2::V1'     => '0',
+        'Capture::Tiny' => '0',
     },
     PREREQ_PM => {
-        'Capture::Tiny'      => '0',
         'Const::Fast'        => '0',
         'Cwd'                => '0',
         'Encode'             => '0',
