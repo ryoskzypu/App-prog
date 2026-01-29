@@ -27,14 +27,6 @@ jobs:
       PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
     steps:
-      continue-on-error: true
-      - name: Check system perl version
-        run: |
-          if perl -e 'exit ($] < 5.040000 ? 0 : 1)'; then
-            echo "System perl older than v5.40.0, skipping this job"
-            exit 1
-          fi
-
       - uses: actions/checkout@v6
       - run: perl -V
       - name: Install deps using cpanm
@@ -42,6 +34,7 @@ jobs:
         with:
           sudo: false
           args: --sudo --installdeps --with-recommends .
+        continue-on-error: true
 
       - name: Show cpanm errors on Ubuntu
         if:  ${{ failure() }}
