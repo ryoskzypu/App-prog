@@ -1144,7 +1144,7 @@ subtest 'Unit test' => sub {
                 \s+  $ansi\s*     File:\ $temp $reset\n
                 \s+  $ansi\s*     Size:\ $size\s+        Blocks:\ $blocks\s+                   IO\ Block:\ $blksize\s+ regular\ file $reset\n
                 \s+  $ansi      Device:\ $major,$minor\t  Inode:\ $ino\s+                          Links:\ $nlink                    $reset\n
-                \s+  $ansi      Access:\ \( $mode \)\s+     Uid:\ \(\ $uid/\s+ $username \)\s+       Gid:\ \(\ $gid/\s+ $grpname \)  $reset\n
+                \s+  $ansi      Access:\ \( $mode \)\s+     Uid:\ \(\s+ $uid/\s+ $username \)\s+       Gid:\ \(\s+ $gid/\s+ $grpname \)  $reset\n
                 \s+  $ansi      Access:\ $DATE_RGX $reset\n
                 \s+  $ansi      Modify:\ $DATE_RGX $reset\n
                 \s+  $ansi      Change:\ $DATE_RGX $reset\n
@@ -1166,7 +1166,7 @@ subtest 'Unit test' => sub {
                 $ansi $ansi $lit_ansi\s+   File:\ $temp          $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi\s+   Size:\ $size\s+       $ansi \\t $ansi Blocks:\ $blocks\s+                   IO\ Block:\ $blksize\s+ regular\ file $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi    Device:\ $major,$minor  $ansi \\t $ansi  Inode:\ $ino\s+                          Links:\ $nlink                    $ansi $lit_reset $ansi \\n
-                $ansi $ansi $lit_ansi    Access:\ \( $mode \)\s+                    Uid:\ \(\ $uid/\s+ $username \)\s+       Gid:\ \(\ $gid/\s+ $grpname \)  $ansi $lit_reset $ansi \\n
+                $ansi $ansi $lit_ansi    Access:\ \( $mode \)\s+                    Uid:\ \(\s+ $uid/\s+ $username \)\s+       Gid:\ \(\s+ $gid/\s+ $grpname \)  $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi    Access:\ $DATE_RGX         $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi    Modify:\ $DATE_RGX         $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi    Change:\ $DATE_RGX         $ansi $lit_reset $ansi \\n
