@@ -1101,11 +1101,6 @@ subtest 'Unit test' => sub {
 
             my $stat = $temp->stat;
 
-            # See https://stackoverflow.com/a/17213290.
-            my $dev   = $stat->dev;
-            my $major = ( $dev >> 8 ) & 0xff;
-            my $minor = $dev & 0xff;
-
             my $ino     = $stat->ino;
             my $mode    = '0644/-rw-r--r--';
             my $nlink   = $stat->nlink;
@@ -1122,13 +1117,28 @@ subtest 'Unit test' => sub {
             my $grpname  = getgrgid $gid;
 
             # NOTE:
+            #   Do not bother with device conversions because its output in stat()
+            #   is too complicated to care about the exact values.
+            my $DEV_RGX = qr{
+                \b
+                (?>
+                      [0-9]+ , [0-9]+
+                    | [0-9]+h / [0-9]+d
+                )
+                \b
+            }x;
+
+            # NOTE:
             #   Very naive regex; it is too complicated to match the stat(1) time outputs correctly.
             #   E.g. 2025-12-28 18:30:41.738150571 +0000
             my $DATE_RGX = qr{
                 \b
-                  [0-9]{4} - [0-9]{2} - [0-9]{2}
-                \ [0-9]{2} : [0-9]{2} : [0-9]{2} \. [0-9]{9}
-                \ [+-] [0-9]{4}
+                (?>
+                      [0-9]{4} - [0-9]{2} - [0-9]{2}
+                    \ [0-9]{2} : [0-9]{2} : [0-9]{2} \. [0-9]{9}
+                    \ [+-] [0-9]{4}
+                    | -
+                )
                 \b
             }x;
 
@@ -1143,7 +1153,7 @@ subtest 'Unit test' => sub {
                 \A   $ansi File $reset\ $ansi '$temp' $reset\ $ansi status\ info $reset\n
                 \s+  $ansi\s*     File:\ $temp $reset\n
                 \s+  $ansi\s*     Size:\ $size\s+        Blocks:\ $blocks\s+                   IO\ Block:\ $blksize\s+ regular\ file $reset\n
-                \s+  $ansi      Device:\ $major,$minor\t  Inode:\ $ino\s+                          Links:\ $nlink                    $reset\n
+                \s+  $ansi      Device:\ $DEV_RGX\t  Inode:\ $ino\s+                          Links:\ $nlink                    $reset\n
                 \s+  $ansi      Access:\ \( $mode \)\s+     Uid:\ \(\s+ $uid/\s+ $username \)\s+       Gid:\ \(\s+ $gid/\s+ $grpname \)  $reset\n
                 \s+  $ansi      Access:\ $DATE_RGX $reset\n
                 \s+  $ansi      Modify:\ $DATE_RGX $reset\n
@@ -1165,7 +1175,7 @@ subtest 'Unit test' => sub {
                 $ansi \$stdout\ =\  $reset $ansi " $reset
                 $ansi $ansi $lit_ansi\s+   File:\ $temp          $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi\s+   Size:\ $size\s+       $ansi \\t $ansi Blocks:\ $blocks\s+                   IO\ Block:\ $blksize\s+ regular\ file $ansi $lit_reset $ansi \\n
-                $ansi $ansi $lit_ansi    Device:\ $major,$minor  $ansi \\t $ansi  Inode:\ $ino\s+                          Links:\ $nlink                    $ansi $lit_reset $ansi \\n
+                $ansi $ansi $lit_ansi    Device:\ $DEV_RGX  $ansi \\t $ansi  Inode:\ $ino\s+                          Links:\ $nlink                    $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi    Access:\ \( $mode \)\s+                    Uid:\ \(\s+ $uid/\s+ $username \)\s+       Gid:\ \(\s+ $gid/\s+ $grpname \)  $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi    Access:\ $DATE_RGX         $ansi $lit_reset $ansi \\n
                 $ansi $ansi $lit_ansi    Modify:\ $DATE_RGX         $ansi $lit_reset $ansi \\n
