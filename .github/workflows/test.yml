@@ -1,4 +1,5 @@
 name: 'CI'
+description: 'Call perl-test.yml on every push and pull request'
 
 on:
   push:
