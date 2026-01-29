@@ -1,3 +1,5 @@
+[![CI](https://github.com/ryoskzypu/App-prog/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/ryoskzypu/App-prog/actions/workflows/test.yml)
+
 # App::prog
 
 **prog** is a small command-line utility intended to be a baseline for Perl CLI
