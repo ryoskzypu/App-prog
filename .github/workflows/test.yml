@@ -19,6 +19,10 @@ jobs:
   ubuntu-latest:
     runs-on: ubuntu-latest
 
+    # Prevent the entire test to fail if minimum perl version from distribution
+    # is newer than Ubuntu's system perl version.
+    continue-on-error: true
+
     env:
       PERL_USE_UNSAFE_INC: 0
       AUTHOR_TESTING: 1
@@ -34,7 +38,6 @@ jobs:
         with:
           sudo: false
           args: --sudo --installdeps --with-recommends .
-        continue-on-error: true
 
       - name: Show cpanm errors on Ubuntu
         if:  ${{ failure() }}
