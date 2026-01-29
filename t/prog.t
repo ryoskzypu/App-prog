@@ -1132,14 +1132,14 @@ subtest 'Unit test' => sub {
             #   Very naive regex; it is too complicated to match the stat(1) time outputs correctly.
             #   E.g. 2025-12-28 18:30:41.738150571 +0000
             my $DATE_RGX = qr{
-                \b
                 (?>
-                      [0-9]{4} - [0-9]{2} - [0-9]{2}
-                    \ [0-9]{2} : [0-9]{2} : [0-9]{2} \. [0-9]{9}
-                    \ [+-] [0-9]{4}
+                      \b
+                        [0-9]{4} - [0-9]{2} - [0-9]{2}
+                      \ [0-9]{2} : [0-9]{2} : [0-9]{2} \. [0-9]{9}
+                      \ [+-] [0-9]{4}
+                      \b
                     | -
                 )
-                \b
             }x;
 
             my $ansi  = $color ? $REGEX{ansi}  : '';
