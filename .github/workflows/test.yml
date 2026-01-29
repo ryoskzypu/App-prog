@@ -27,11 +27,12 @@ jobs:
       PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
     steps:
+      continue-on-error: true
       - name: Check system perl version
         run: |
           if perl -e 'exit ($] < 5.040000 ? 0 : 1)'; then
-            echo "System perl older than v5.40.0, skipping this job";
-            exit 0
+            echo "System perl older than v5.40.0, skipping this job"
+            exit 1
           fi
 
       - uses: actions/checkout@v6
