@@ -14,5 +14,6 @@ jobs:
   call-perl-test:
     uses: ryoskzypu/github_workflows/.github/workflows/perl-test.yml@main
     with:
-      since-perl: v5.40.0
+      since-perl: 'v5.40.0'
       with-devel: true
+      coverage: true
