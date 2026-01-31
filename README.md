@@ -1,4 +1,5 @@
-[![CI](https://github.com/ryoskzypu/App-prog/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/ryoskzypu/App-prog/actions/workflows/test.yml)
+[![CI](https://github.com/ryoskzypu/App-prog/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/ryoskzypu/App-prog/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/ryoskzypu/App-prog/badge.svg)](https://coveralls.io/github/ryoskzypu/App-prog)
 
 # App::prog
 
