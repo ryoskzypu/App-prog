@@ -12,6 +12,9 @@ my %WriteMakefileArgs = (
     ABSTRACT_FROM      => 'lib/App/prog.pm',
     LICENSE            => 'open_source',
     MIN_PERL_VERSION   => 'v5.40.0',
+    EXE_FILES => [
+        'bin/prog',
+    ],
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => '6.64',
     },
@@ -34,9 +37,6 @@ my %WriteMakefileArgs = (
         'Pod::Usage'         => '0',
         'Term::ANSIColor'    => '2.02',
     },
-    EXE_FILES => [
-        'bin/prog',
-    ],
     META_MERGE => {
         'meta-spec' => { version => 2 },
         prereqs     => {
