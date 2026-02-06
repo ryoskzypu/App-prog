@@ -6,13 +6,13 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
-    NAME               => 'App::prog',
-    AUTHOR             => q{ryoskzypu <ryoskzypu@proton.me>},
-    VERSION_FROM       => 'lib/App/prog.pm',
-    ABSTRACT_FROM      => 'lib/App/prog.pm',
-    LICENSE            => 'open_source',
-    MIN_PERL_VERSION   => 'v5.40.0',
-    EXE_FILES => [
+    NAME             => 'App::prog',
+    AUTHOR           => q{ryoskzypu <ryoskzypu@proton.me>},
+    VERSION_FROM     => 'lib/App/prog.pm',
+    ABSTRACT_FROM    => 'lib/App/prog.pm',
+    LICENSE          => 'open_source',
+    MIN_PERL_VERSION => 'v5.40.0',
+    EXE_FILES        => [
         'bin/prog',
     ],
     CONFIGURE_REQUIRES => {
@@ -39,7 +39,18 @@ my %WriteMakefileArgs = (
     },
     META_MERGE => {
         'meta-spec' => { version => 2 },
-        prereqs     => {
+        no_index    => {
+            directory => [
+                qw<
+                    eg
+                    examples
+                    share
+                    t
+                    xt
+                >
+            ],
+        },
+        prereqs => {
             develop => {
                 recommends => {
                     'App::CPANTS::Lint'        => '0',
