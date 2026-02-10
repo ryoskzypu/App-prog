@@ -58,7 +58,7 @@ $prog->init(@ARGV);
 
 Parses the list given (typically from `@ARGV`) for options, reads configuration
 from `prog.toml` if present (see ["CONFIGURATION" in prog](https://metacpan.org/pod/prog#CONFIGURATION)), and reads environment
-variables.
+variables. Returns `self`.
 
 ## run
 
