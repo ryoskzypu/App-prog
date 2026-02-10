@@ -259,7 +259,7 @@ sub _process_opts ( $self, $argv //= undef )
         ),
         'dry-run'      => \$self->{opts}{dry_run},
         'generate-cfg' => \&_generate_cfg_handler,
-        'h|help'       => sub { pod2usage( -exitval => 0, -verbose => 0 ); },
+        'h|help'       => sub { pod2usage( -exitval => 0, -verbose => 0 ) },
         'q|quiet'      => \$self->{opts}{quiet},
         'v|verbose'    => \$self->{opts}{verbose},
         'V|version'    => sub { print "$PROG $VERSION\n"; exit 0 },
@@ -772,7 +772,7 @@ C<palette> colors).
 
 Parses the list given (typically from C<@ARGV>) for options, reads configuration
 from C<prog.toml> if present (see L<prog/CONFIGURATION>), and reads environment
-variables.
+variables. Returns C<self>.
 
 =head2 run
 
