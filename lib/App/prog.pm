@@ -195,7 +195,7 @@ sub _set_prefs (%opts)
     }
 }
 
-sub _process_opts ( $self, $argv //= undef )
+sub _process_opts ( $self, $argv = undef )
 {
     die 'Missing blessed object'          unless blessed $self;
     return 0                              unless defined $argv;
