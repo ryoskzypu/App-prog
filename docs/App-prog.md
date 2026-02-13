@@ -1,6 +1,6 @@
 # NAME
 
-App::prog - core implementation for prog
+App::prog - read a file, print its contents, then run stat(1) on it
 
 # SYNOPSIS
 

@@ -722,7 +722,7 @@ sub _maybe_color ( $self, $msg, $palette //= undef )
 
 =head1 NAME
 
-App::prog - core implementation for prog
+App::prog - read a file, print its contents, then run stat(1) on it
 
 =head1 SYNOPSIS
 
