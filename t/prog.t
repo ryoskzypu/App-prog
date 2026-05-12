@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!perl
 #
 # Test every component of App::prog to ensure correct behavior. App::prog must
 # run as documented in its POD (also in its wrapper POD).
@@ -41,11 +41,9 @@ use Test2::V1 -utf8, qw<
 
 use App::prog;
 
-use File::Basename qw< basename >;
-use File::Spec     ();
-use Cwd            qw< getcwd >;
-use Path::Tiny;
-use Capture::Tiny qw< capture capture_stderr >;
+use File::Spec ();
+use Path::Tiny 0.150;
+use Capture::Tiny 0.50 qw< capture capture_stderr >;
 
 my $DDP++;
 
@@ -56,7 +54,7 @@ catch ($e) {
     $DDP = 0;
 }
 
-my $PROG = basename($0);
+my $PROG = path($0)->basename;
 
 my $FAIL_MSG = 'This test fails when run by TAP::Harness/prove or Test2::Harness/yath';
 
@@ -310,7 +308,7 @@ subtest 'Unit test' => sub {
         subtest 'Test config file discovery order' => sub {
             #skip_all;
 
-            my $cwd  = getcwd();
+            my $cwd  = Path::Tiny->cwd;
             my $temp = Path::Tiny->tempdir;
             my $file = $DEFAULTS{config}{file};
 

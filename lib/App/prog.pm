@@ -11,17 +11,17 @@ use open qw< :std :encoding(UTF-8) >;                     # Encode/decode STDIN,
 use feature qw< unicode_strings >;                        # Use Unicode rules for all string operations.
 
 use Encode qw< encode decode >;
-use Encode::Locale;
-use Path::Tiny;                                                # Add several file operations.
-use File::Basename qw< basename >;
-use File::Spec     ();
-use File::HomeDir  ();                                         # Find home directory portably.
-use File::XDG 1.00;                                            # Add XDG base directory specification.
-use Getopt::Long::More qw< GetOptionsFromArray optspec >;
+use Encode::Locale 1.05;
+use Path::Tiny 0.150;                                          # Add several file operations.
+use File::Basename      qw< basename >;
+use File::Spec          ();
+use File::HomeDir 1.006 ();                                    # Find home directory portably.
+use File::XDG 1.03;                                            # Add XDG base directory specification.
+use Getopt::Long::More 0.007 qw< GetOptionsFromArray optspec >;
 use Pod::Usage;
-use Const::Fast;                                               # Add read-only variables support.
-use Term::ANSIColor 2.02 qw< colored colorstrip colorvalid >;  # Add ANSI color support.
-use IPC::Run3;                                                 # Redirect/capture STDIN, STDOUT, and STDERR from a subprocess.
+use Const::Fast 0.014;                                         # Add read-only variables support.
+use Term::ANSIColor 5.01 qw< colored colorstrip colorvalid >;  # Add ANSI color support.
+use IPC::Run3 0.049;                                           # Redirect/capture STDIN, STDOUT, and STDERR from a subprocess.
 
 # Additional useful modules
 #   Term::ReadLine::Gnu    # Add Readline support.
@@ -399,6 +399,7 @@ sub _read_config ($self)
 
     try {
         require TOML::Tiny;
+        TOML::Tiny->VERSION('0.21');
         TOML::Tiny->import( qw< from_toml > );
     }
     catch ($e) {
@@ -484,7 +485,10 @@ sub _process_env ($self)
     $self->{env}{debug} = $ENV{PROG_DEBUG} ? 1 : 0;
 
     try {
-        require Data::Printer if $self->{env}{debug};
+        if ( $self->{env}{debug} ) {
+            require Data::Printer;
+            Data::Printer->VERSION('1.002001');
+        }
     }
     catch ($e) {
         warn $e;
