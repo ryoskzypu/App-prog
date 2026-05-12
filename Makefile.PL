@@ -20,7 +20,7 @@ my %WriteMakefileArgs = (
     },
     TEST_REQUIRES => {
         'Capture::Tiny' => '0.50',
-        'Path::Tiny'    => '0.150';
+        'Path::Tiny'    => '0.150',
         'Test2::V1'     => '0',
     },
     PREREQ_PM => {
