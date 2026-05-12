@@ -17,7 +17,6 @@ use File::Basename      qw< basename >;
 use File::Spec          ();
 use File::HomeDir 1.006 ();                                    # Find home directory portably.
 use File::XDG 1.03;                                            # Add XDG base directory specification.
-use Getopt::Long::More 0.007 qw< GetOptionsFromArray optspec >;
 use Pod::Usage;
 use Const::Fast 0.014;                                         # Add read-only variables support.
 use Term::ANSIColor 5.01 qw< colored colorstrip colorvalid >;  # Add ANSI color support.
@@ -216,55 +215,97 @@ sub _process_opts ( $self, $argv = undef )
         warn "$PROG: $msg\n";
     };
 
-    Getopt::Long::More::Configure(
-        qw<
-            default
-            gnu_getopt
-            no_ignore_case
-        >
-    );
+    # Bash completion
+    try {
+        require Getopt::Long::More;
 
-    GetOptionsFromArray(
-        $self->{argv},
-        'c'       => \$self->{opts}{color},
-        'color=s' => optspec(
-            destination => \$self->{opts}{color},
-            completion  => [ qw< never always auto > ],
-        ),
-        'palette=s%' => optspec(
-            destination => sub {
+        Getopt::Long::More->VERSION('0.007');
+        Getopt::Long::More->import( qw< GetOptionsFromArray optspec > );
+
+        Getopt::Long::More::Configure(
+            qw<
+                default
+                gnu_getopt
+                no_ignore_case
+            >
+        );
+
+        GetOptionsFromArray(
+            $self->{argv},
+            'c'       => \$self->{opts}{color},
+            'color=s' => optspec(
+                destination => \$self->{opts}{color},
+                completion  => [ qw< never always auto > ],
+            ),
+            'palette=s%' => optspec(
+                destination => sub {
+                    my ( $opt_name, $output, $ansi ) = @_;
+
+                    return unless exists $self->{prefs}{palette}{$output};
+
+                    $self->{opts}{palette}{$output} = $ansi if colorvalid($ansi);
+                },
+                completion => sub {
+                    require Complete::Util;
+                    my %args = @_;
+
+                    # Prevent '=' from being escaped.
+                    $ENV{COMPLETE_BASH_DEFAULT_ESC_MODE} = 'none';
+
+                    my $comp = Complete::Util::complete_array_elem(
+                        word  => $args{word},
+                        array => $DEFAULTS{complete_outputs},
+                    );
+
+                    # Prevent shell from appending a space.
+                    Complete::Util::ununiquify_answer( answer => $comp ) if scalar $comp->@* == 1;
+
+                    return $comp;
+                },
+            ),
+            'dry-run'      => \$self->{opts}{dry_run},
+            'generate-cfg' => \&_generate_cfg_handler,
+            'h|help'       => sub { pod2usage( -exitval => 0, -verbose => 0 ) },
+            'q|quiet'      => \$self->{opts}{quiet},
+            'v|verbose'    => \$self->{opts}{verbose},
+            'V|version'    => sub { print "$PROG $VERSION\n"; exit 0 },
+
+        ) or return 2;
+    }
+    catch ($e) {
+        # Use Getopt::Long as fallback.
+        require Getopt::Long;
+
+        Getopt::Long->import(
+            qw<
+                GetOptionsFromArray
+                :config
+                default
+                gnu_getopt
+                no_ignore_case
+            >
+        );
+
+        GetOptionsFromArray(
+            $self->{argv},
+            'c'          => \$self->{opts}{color},
+            'color=s'    => \$self->{opts}{color},
+            'palette=s%' => sub {
                 my ( $opt_name, $output, $ansi ) = @_;
 
                 return unless exists $self->{prefs}{palette}{$output};
 
                 $self->{opts}{palette}{$output} = $ansi if colorvalid($ansi);
             },
-            completion => sub {
-                require Complete::Util;
-                my %args = @_;
+            'dry-run'      => \$self->{opts}{dry_run},
+            'generate-cfg' => \&_generate_cfg_handler,
+            'h|help'       => sub { pod2usage( -exitval => 0, -verbose => 0 ) },
+            'q|quiet'      => \$self->{opts}{quiet},
+            'v|verbose'    => \$self->{opts}{verbose},
+            'V|version'    => sub { print "$PROG $VERSION\n"; exit 0 },
 
-                # Prevent '=' from being escaped.
-                $ENV{COMPLETE_BASH_DEFAULT_ESC_MODE} = 'none';
-
-                my $comp = Complete::Util::complete_array_elem(
-                    word  => $args{word},
-                    array => $DEFAULTS{complete_outputs},
-                );
-
-                # Prevent shell from appending a space.
-                Complete::Util::ununiquify_answer( answer => $comp ) if scalar $comp->@* == 1;
-
-                return $comp;
-            },
-        ),
-        'dry-run'      => \$self->{opts}{dry_run},
-        'generate-cfg' => \&_generate_cfg_handler,
-        'h|help'       => sub { pod2usage( -exitval => 0, -verbose => 0 ) },
-        'q|quiet'      => \$self->{opts}{quiet},
-        'v|verbose'    => \$self->{opts}{verbose},
-        'V|version'    => sub { print "$PROG $VERSION\n"; exit 0 },
-
-    ) or return 2;
+        ) or return 2;
+    }
 
     return 0;
 }

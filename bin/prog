@@ -128,6 +128,8 @@ in the shell or add it to a bash startup file (e.g. F</etc/bash.bashrc> or F<~/.
 
   complete -C prog prog
 
+Note that L<Getopt::Long::More> is required.
+
 =head1 CONFIGURATION
 
 B<prog> supports a configuration file to simplify common L</OPTIONS>. By default,
